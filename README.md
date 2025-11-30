@@ -6,7 +6,7 @@ Target group: Seniors (and caregivers) in 2030.
 
 Problem: AI‑powered scams and deepfakes make it hard to know what to trust. Seniors face higher risk of digital fraud and consent confusion.
 
-Solution: A simple assistant to check messages for risk using OpenAI, manage trusted contacts with shared safe words, and generate clear consent/report templates.
+Solution: A simple assistant to check messages for risk using OpenAI, manage trusted contacts with shared safe words, and generate clear report templates.
 
 ## Quickstart (Windows PowerShell)
 ```powershell
