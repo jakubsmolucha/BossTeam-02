@@ -1,4 +1,3 @@
-import io
 import streamlit as st
 
 from trustguard.llm import llm_assess_message
@@ -6,10 +5,11 @@ import os
 from trustguard.storage import load_contacts, save_contacts, hash_safe_word, verify_safe_word
 from trustguard.templates import generate_report
 
-st.set_page_config(page_title="TrustGuard 2030", page_icon="🛡️", layout="centered")
+st.set_page_config(page_title="TrustGuard", page_icon="🛡️", layout="centered")
 
-st.title("🛡️ TrustGuard 2030")
+st.title("🛡️ TrustGuard")
 
+#Banner
 st.markdown(
     """
 TrustGuard helps you:
@@ -20,9 +20,6 @@ TrustGuard helps you:
 All data stays on your device. No cloud or external APIs.
 """
 )
-
-# Show OpenAI key status banner
-api_present = bool(os.getenv("OPENAI_API_KEY"))
 
 # Tabs
 check_tab, contacts_tab, report_tab, learn_tab = st.tabs([

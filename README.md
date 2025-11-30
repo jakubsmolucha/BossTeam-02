@@ -10,7 +10,6 @@ Solution: A simple assistant to check messages for risk using OpenAI, manage tru
 
 ## Quickstart (Windows PowerShell)
 ```powershell
-cd trustguard-2030
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
