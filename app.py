@@ -7,7 +7,6 @@ from trustguard.templates import generate_report
 
 st.set_page_config(page_title="TrustGuard", page_icon="🛡️", layout="centered")
 
-# Accessible, elderly-friendly styling
 st.markdown(
     """
     <style>
@@ -51,6 +50,11 @@ st.markdown(
     [data-testid="stProgressBar"] div div { background-color: var(--tg-primary) !important; }
 
     .tg-section { border: 2px solid var(--tg-border); padding: 16px; border-radius: 10px; background: #222222; }
+
+    .tg-badge { display:inline-block; padding: 6px 10px; border-radius: 999px; font-weight: 700; }
+    .tg-badge.green { background:#1a7f37; color:#ffffff; }
+    .tg-badge.orange { background:#ff8c00; color:#111111; }
+    .tg-badge.red { background:#b00020; color:#ffffff; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -58,7 +62,6 @@ st.markdown(
 
 st.title("🛡️ TrustGuard")
 
-#Banner
 st.markdown(
     """
 TrustGuard helps you:
@@ -70,7 +73,6 @@ All data stays on your device. No cloud or external APIs.
 """
 )
 
-# Tabs
 check_tab, contacts_tab, report_tab, learn_tab = st.tabs([
     "Check a Message", "Trusted Contacts", "Report", "Learn"
 ])
@@ -87,10 +89,25 @@ with check_tab:
     st.markdown('</div>', unsafe_allow_html=True)
     if analyze:
         try:
-            allowlist = [a.strip() for a in (allow or "").split(",") if a.strip()]
-            ai = llm_assess_message(msg, sender=sender, allowlist=allowlist)
-            st.markdown(f"### Risk: {ai['verdict']} ({ai['score']}/100)")
-            st.progress(ai['score'] / 100)
+            with st.spinner('Analyzing message...'):
+                allowlist = [a.strip() for a in (allow or "").split(",") if a.strip()]
+                ai = llm_assess_message(msg, sender=sender, allowlist=allowlist)
+
+            # Color-coded verdict badge based on score
+            score = ai.get('score', 0)
+            verdict = ai.get('verdict', 'Unknown')
+            if score < 33:
+                badge_class = 'green'
+                label = 'Low Risk'
+            elif score < 67:
+                badge_class = 'orange'
+                label = 'Medium Risk'
+            else:
+                badge_class = 'red'
+                label = 'High Risk'
+
+            st.markdown(f"**Risk**: <span class='tg-badge {badge_class}'>{label}</span> ({score}/100)", unsafe_allow_html=True)
+            st.progress(score / 100)
             st.caption(f"Confidence: {ai.get('confidence', 0.6):.2f}")
             if ai.get("reasons"):
                 st.markdown("**Reasons**")
@@ -188,7 +205,6 @@ with learn_tab:
         st.write(f"- {t}")
     st.markdown('</div>', unsafe_allow_html=True)
 
-# Hide deploy button
 hide_streamlit_style = """
     <style>
     #MainMenu {visibility: hidden;}
